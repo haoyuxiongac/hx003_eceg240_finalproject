@@ -3,6 +3,10 @@ NET "btnUp"      LOC = "B18";
 NET "btnDown"      LOC = "D18";
 NET "btnLeft"      LOC = "E18";
 NET "btnRight"      LOC = "H13";
+NET "btnUp" CLOCK_DEDICATED_ROUTE = FALSE;
+NET "btnDown" CLOCK_DEDICATED_ROUTE = FALSE;
+NET "btnLeft" CLOCK_DEDICATED_ROUTE = FALSE;
+NET "btnRight" CLOCK_DEDICATED_ROUTE = FALSE;
 
 ## VGA Connector 
 NET "vga_R[0]"   LOC = "R9";
