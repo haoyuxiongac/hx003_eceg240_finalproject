@@ -20,3 +20,16 @@ NET "vga_B[1]"  LOC = "U4";
 
 NET "vga_h_sync"       LOC = "T4";
 NET "vga_v_sync"       LOC = "U3";
+
+NET "DispSelect[3]" LOC = F15; 		//add the pins for your FPGA here
+NET "DispSelect[2]" LOC = C18;
+NET "DispSelect[1]" LOC = H17;
+NET "DispSelect[0]" LOC = F17;
+NET "SevenSegValue[0]" LOC = C17;
+NET "SevenSegValue[1]" LOC = H14;
+NET "SevenSegValue[2]" LOC = J17;
+NET "SevenSegValue[3]" LOC = G14;
+NET "SevenSegValue[4]" LOC = D16;
+NET "SevenSegValue[5]" LOC = D17;
+NET "SevenSegValue[6]" LOC = F18;
+NET "SevenSegValue[7]" LOC = L18;

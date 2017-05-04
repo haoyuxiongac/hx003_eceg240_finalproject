@@ -28,7 +28,7 @@ output wire [1:0] vga_B;
 input btnUp, btnDown, btnLeft, btnRight;
 output [7:0] SevenSegValue;
 output [3:0] DispSelect;
-output speaker; 
+output wire speaker; 
 
 
 	wire upClick, downClick, leftClick, rightClick;
@@ -37,7 +37,6 @@ output speaker;
 	wire [9:0] FrogX , FrogY;
 	wire [15:0] score;
 	wire win;
-
 	
 	//initial FrogX = 152;
 	//initial FrogY = 240;	
@@ -121,7 +120,7 @@ output speaker;
 		.clk(count),  
 		.CrocY(CrocY1),
 		.defaultY(108),
-		.speed(1)
+		.speed(score+1)
 	);
 
 	//position of Croc2
@@ -129,14 +128,14 @@ output speaker;
 		.clk(count), 
 		.CrocY(CrocY2),
 		.defaultY(207),
-		.speed(2)
+		.speed(score+2)
 	);
 
 	croc Croc3(
 		.clk(count), 
 		.CrocY(CrocY3),
 		.defaultY(307),
-		.speed(3)
+		.speed(score+3)
 	);
 	
 	actual actualp(
@@ -164,15 +163,5 @@ output speaker;
 		.InCroc(InCroc),
 		.dead(die)
 	);
-	/*
-	always @(posedge dclk)
-		die <= InFrog & InCroc;*/
-	playsound sound(
-		.clk(dclk),
-		.win(win),
-		.die(dead),
-		.speaker(speaker)
-	);
-
 	
 endmodule
