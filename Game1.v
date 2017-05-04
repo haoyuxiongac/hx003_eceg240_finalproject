@@ -18,21 +18,25 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module Game1(clk, vga_h_sync, vga_v_sync, vga_R, vga_G, vga_B, btnUp, btnDown, btnLeft, btnRight //FrogX, FrogY, CrocY1, CrocY2
-    );
+module Game1(clk, vga_h_sync, vga_v_sync, vga_R, vga_G, vga_B, btnUp, btnDown, btnLeft, btnRight, //FrogX, FrogY, CrocY1, CrocY2
+   SevenSegValue, DispSelect, speaker
+	);
 input clk;
 output wire vga_h_sync, vga_v_sync;
 output wire [2:0] vga_R, vga_G;
 output wire [1:0] vga_B;
 input btnUp, btnDown, btnLeft, btnRight;
-
+output [7:0] SevenSegValue;
+output [3:0] DispSelect;
+output speaker; 
 
 
 	wire upClick, downClick, leftClick, rightClick;
 	wire dclk, InFrog, InCroc;
 	wire die;
 	wire [9:0] FrogX , FrogY;
-	
+	wire [15:0] score;
+	wire win;
 
 	
 	//initial FrogX = 152;
@@ -90,7 +94,12 @@ input btnUp, btnDown, btnLeft, btnRight;
 		.clean(rightClick)
 	);
 
-	
+	sevenSegmentDisplay scoreboard(
+		.A(score),
+		.clk(clk),
+		.segments(SevenSegValue),
+		.digitselect(DispSelect)
+	);
 	 
 	//position of frog
 	
@@ -102,7 +111,9 @@ input btnUp, btnDown, btnLeft, btnRight;
 		.btnLeft(leftClick), 
 		.btnRight(rightClick), 
 		.FrogX(FrogX), 
-		.FrogY(FrogY) 
+		.FrogY(FrogY),
+		.score(score),
+		.win(win)
 		);
 
 	//position of Croc1 
@@ -156,7 +167,12 @@ input btnUp, btnDown, btnLeft, btnRight;
 	/*
 	always @(posedge dclk)
 		die <= InFrog & InCroc;*/
-	
+	playsound sound(
+		.clk(dclk),
+		.win(win),
+		.die(dead),
+		.speaker(speaker)
+	);
 
 	
 endmodule
