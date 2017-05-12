@@ -18,40 +18,34 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module croc(clk, hc, vc, CrocX, CrocY, CrocIn
+module croc(clk,  CrocY, defaultY, speed
     );
-input clk;
-input [9:0] hc, vc;
-input [9:0] CrocX;
-output reg [9:0] CrocY;
-output CrocIn;
+	input clk;
+	input [9:0] defaultY;
+	input [3:0] speed;
+	output reg [9:0] CrocY;
 
-reg Croc_inX, Croc_inY;
-reg CrocDir;
-initial begin
-	CrocDir <= 0;
-end
 
-always @(posedge clk)
-begin
-	if (CrocY == 8) CrocDir <= 0;
-	else if (CrocY == 479) CrocDir <= 1;
-end
+	reg CrocDir;
+	initial begin
+		CrocDir = 0;
+		CrocY = defaultY;
+	end
+	
+	wire[3:0] crocSpeed ;
+	assign crocSpeed = speed;
 
-always @(posedge clk)
-begin
-	if (CrocDir) CrocY <= CrocY - 4;
-	else CrocY <= CrocY + 4;
-end
+	always @(posedge clk)
+		begin
+			if (CrocY < 16) CrocDir <= 0;
+			else if (CrocY > 400) CrocDir <= 1;
+		end
 
-always @(posedge clk)
-begin
-	if (vc >= CrocY && vc <= CrocY+150) Croc_inY <= 1;
-	else Croc_inY <= 0;
-	if (hc >= CrocX && hc <= CrocX+50) Croc_inX <= 1;
-	else Croc_inX <= 0;
-end
+	always @(posedge clk)
+		begin
+			if (CrocDir) CrocY <= CrocY - crocSpeed;
+			else CrocY <= CrocY + crocSpeed;
+		end
 
-assign CrocIn = Croc_inX & Croc_inY;
 
 endmodule

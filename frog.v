@@ -18,59 +18,76 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module frog(clk, hc, vc, btnUp, btnDown, btnLeft, btnRight, FrogX, FrogY, FrogIn
+module frog(clk, die, btnUp, btnDown, btnLeft, btnRight, FrogX, FrogY, score, win
     );
-input clk;
-input [9:0] hc, vc;
-input btnUp, btnDown, btnLeft, btnRight;
-output reg [9:0] FrogX, FrogY;
-output FrogIn;
-
-parameter defaultFrogX = 100;
-parameter defaultFrogY = 240;
-
-initial begin
-	FrogX = defaultFrogX;
-	FrogY = defaultFrogY;
-end
-
-reg Frog_inX, Frog_inY;
-
-always @(posedge clk)
-begin
-	if (hc >= FrogX && hc <= FrogX+32) Frog_inX <= 1;
-	else Frog_inX <= 0;
-	if (vc >= FrogY && vc <= FrogY+32) Frog_inY <= 1;
-	else Frog_inY <= 0;
-end
-
-always @(posedge clk)
-begin
-	if(btnDown)
-	begin
-		if (FrogY < 471)
-			FrogY <= FrogY + 8;
-	end
+	input clk, die;
+	input btnUp, btnDown, btnLeft, btnRight;
+	output reg [15:0] score;
+	output reg [9:0] FrogX, FrogY;
 	
-	if (btnUp)
-	begin
-		if(FrogY > 8)
-			FrogY <= FrogY - 8;
-	end
-	
-	if (btnRight)
-	begin
-		if (FrogX < 631)
-			FrogX <= FrogX + 8;
-	end
-	
-	if (btnLeft)
-	begin
-		if(FrogX > 8)
-			FrogX <= FrogX - 8;
-	end
-end
+	initial begin
+		FrogX = 152;
+		FrogY = 240;
+		end
+		
+	wire move;
+	output win;
+	assign move = btnUp | btnDown | btnLeft | btnRight | die;
 
-assign FrogIn = Frog_inX & Frog_inY;
+	assign win = (FrogX>= 730);
+
+	always @(posedge move)
+
+		begin
+			if(die)
+				begin
+					FrogX <= 152;
+					FrogY <= 240;
+					score <= 0;
+				end
+			else
+				begin
+					if(btnDown)
+						begin
+							if (FrogY < 471)
+								FrogY <= FrogY + 16;
+						end
+				   else if (btnUp)
+						begin
+							if(FrogY > 40)
+								FrogY <= FrogY - 16;
+						end
+					
+					 else if (btnRight)
+						begin
+							if (FrogX < 730)
+								FrogX <= FrogX + 16;
+							else if(FrogX>= 730)
+								begin 
+									FrogX <= 152;
+									FrogY <= 240;	
+									score <= score+1;
+								end
+									
+								
+						end
+					else if (btnLeft)
+						begin
+							if(FrogX > 152)
+								FrogX <= FrogX - 16;
+					   end
+
+					else 
+						begin
+							FrogX <= FrogX;
+							FrogY <= FrogY;	
+						end
+					
+
+
+				end
+		end
+
+
 
 endmodule
